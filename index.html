@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coaching Diagram App — Business Case | First Use</title>
+<meta name="description" content="The business case for an AFL-native, phone-first coaching diagram platform for community football. First Use, September 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* First Use brand — pulled from live firstuse.com.au theme */
+    --fu-cyan:        #77E7F3;   /* signature teal/turquoise */
+    --fu-cyan-soft:   #E7FBFE;   /* teal tint (chips, callouts) */
+    --fu-ink:         #121212;   /* near-black text */
+    --fu-ink-soft:    #2F3442;   /* secondary dark */
+    --fu-navy:        #172351;   /* dark navy accent */
+    --fu-slate:       #242833;   /* panel dark */
+    --fu-paper:       #FFFFFF;
+    --fu-offwhite:    #F3F3F3;
+    --fu-line:        #E2E6EA;
+    --fu-green-soft:  #E2F6EC;   /* FREE / positive chips */
+    --fu-green-ink:   #177A4C;
+    --fu-amber-soft:  #FFF4E0;
+    --fu-amber-ink:   #9A6700;
+    --fu-red-soft:    #FDECEA;
+    --fu-red-ink:     #B3261E;
+    --radius: 14px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:76px}
+  body{
+    font-family:"Open Sans",sans-serif;
+    color:var(--fu-ink);
+    background:var(--fu-offwhite);
+    line-height:1.6;
+    font-size:16.5px;
+  }
+  h1,h2,h3,h4{font-family:Poppins,sans-serif;line-height:1.15;letter-spacing:-.01em}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:var(--fu-navy);
+    border-bottom:3px solid var(--fu-cyan);
+  }
+  .topbar .wrap{display:flex;align-items:center;gap:20px;height:60px}
+  .topbar .brand{
+    font-family:Poppins,sans-serif;font-weight:800;color:#fff;
+    font-size:1.05rem;letter-spacing:.02em;white-space:nowrap;
+  }
+  .topbar .brand span{color:var(--fu-cyan)}
+  .topbar nav{display:flex;gap:4px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+  .topbar nav::-webkit-scrollbar{display:none}
+  .topbar nav a{
+    color:#DDE3F5;text-decoration:none;font-size:.8rem;font-weight:600;
+    padding:6px 10px;border-radius:8px;white-space:nowrap;transition:.15s;
+  }
+  .topbar nav a:hover{background:rgba(119,231,243,.15);color:var(--fu-cyan)}
+
+  /* ---------- Hero ---------- */
+  .hero{background:var(--fu-cyan);padding:56px 0 48px}
+  .hero .wrap{display:grid;grid-template-columns:150px 1fr;gap:40px;align-items:center}
+  .hero img{width:150px;height:auto;display:block;border-radius:8px}
+  .eyebrow{
+    font-family:Poppins,sans-serif;font-weight:700;font-size:.78rem;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--fu-navy);
+    margin-bottom:10px;
+  }
+  .hero h1{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:900;color:var(--fu-ink)}
+  .hero p.lede{font-size:1.13rem;max-width:56ch;margin-top:12px;color:#17323a;font-weight:600}
+  .stat-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+  .stat-chip{
+    background:var(--fu-paper);border:2px solid var(--fu-ink);border-radius:12px;
+    padding:10px 18px;font-family:Poppins,sans-serif;
+  }
+  .stat-chip b{display:block;font-size:1.35rem;font-weight:900;line-height:1.1}
+  .stat-chip span{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--fu-ink-soft)}
+
+  /* ---------- Sections ---------- */
+  section{padding:56px 0}
+  section:nth-of-type(even){background:var(--fu-paper)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:28px}
+  .sec-num{
+    font-family:Poppins,sans-serif;font-weight:900;font-size:1rem;color:var(--fu-paper);
+    background:var(--fu-navy);border-radius:8px;padding:6px 12px;flex:none;
+  }
+  .sec-head h2{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:800}
+  h3.sub{font-size:1.08rem;font-weight:700;margin:26px 0 12px}
+  p + p{margin-top:12px}
+  .muted{color:var(--fu-ink-soft)}
+  ul.tight{margin:12px 0 0 20px}
+  ul.tight li{margin-bottom:8px}
+  b,strong{font-weight:700}
+
+  /* ---------- Cards & grids ---------- */
+  .grid{display:grid;gap:16px}
+  .grid.c2{grid-template-columns:repeat(2,1fr)}
+  .grid.c3{grid-template-columns:repeat(3,1fr)}
+  .card{
+    background:var(--fu-paper);border:1px solid var(--fu-line);border-radius:var(--radius);
+    padding:22px;
+  }
+  section:nth-of-type(even) .card{background:var(--fu-offwhite)}
+  .card h3,.card h4{font-size:1.02rem;font-weight:700;margin-bottom:8px}
+  .card p,.card li{font-size:.94rem;color:var(--fu-ink-soft)}
+  .card .kicker{
+    display:inline-block;font-family:Poppins,sans-serif;font-size:.68rem;font-weight:700;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--fu-navy);
+    background:var(--fu-cyan-soft);border-radius:6px;padding:3px 9px;margin-bottom:10px;
+  }
+
+  /* ---------- Callouts / chips ---------- */
+  .callout{
+    border-left:5px solid var(--fu-cyan);background:var(--fu-cyan-soft);
+    border-radius:0 var(--radius) var(--radius) 0;padding:18px 22px;margin:24px 0;
+  }
+  .callout.navy{border-left-color:var(--fu-navy);background:#EDF0F9}
+  .callout p{font-size:.97rem}
+  .chip{
+    display:inline-block;font-family:Poppins,sans-serif;font-size:.7rem;font-weight:700;
+    letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:3px 11px;
+  }
+  .chip.free{background:var(--fu-green-soft);color:var(--fu-green-ink)}
+  .chip.paid{background:var(--fu-cyan-soft);color:var(--fu-navy)}
+  .pill{display:inline-block;font-size:.75rem;font-weight:700;border-radius:999px;padding:3px 12px}
+  .pill.high{background:var(--fu-red-soft);color:var(--fu-red-ink)}
+  .pill.medium{background:var(--fu-amber-soft);color:var(--fu-amber-ink)}
+
+  /* ---------- Tables ---------- */
+  .table-scroll{overflow-x:auto;margin-top:16px;border:1px solid var(--fu-line);border-radius:var(--radius);background:var(--fu-paper)}
+  table{width:100%;border-collapse:collapse;font-size:.92rem;min-width:560px}
+  th{
+    font-family:Poppins,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.09em;
+    text-transform:uppercase;text-align:left;color:#fff;background:var(--fu-slate);
+    padding:11px 16px;
+  }
+  td{padding:12px 16px;border-top:1px solid var(--fu-line);vertical-align:top;color:var(--fu-ink-soft)}
+  td b{color:var(--fu-ink)}
+  tr.hl td{background:var(--fu-cyan-soft)}
+  tr.hl td:first-child{border-left:4px solid var(--fu-cyan)}
+
+  /* ---------- Numbered demand signals ---------- */
+  .signals{counter-reset:sig;margin-top:8px}
+  .signal{
+    display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--fu-line);
+  }
+  .signal:last-child{border-bottom:none}
+  .signal::before{
+    counter-increment:sig;content:counter(sig,decimal-leading-zero);
+    font-family:Poppins,sans-serif;font-weight:900;font-size:1.05rem;color:var(--fu-navy);
+    background:var(--fu-cyan);border-radius:10px;width:44px;height:44px;flex:none;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .signal p{font-size:.95rem;color:var(--fu-ink-soft)}
+  .signal p b{color:var(--fu-ink)}
+
+  /* ---------- Differentiator strip ---------- */
+  .diff-strip{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 8px}
+  .diff{
+    font-family:Poppins,sans-serif;font-size:.82rem;font-weight:700;color:var(--fu-paper);
+    background:var(--fu-navy);border-radius:999px;padding:8px 16px;
+  }
+
+  /* ---------- Pricing tiers ---------- */
+  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
+  .tier{border:1px solid var(--fu-line);border-radius:var(--radius);padding:20px;background:var(--fu-paper)}
+  .tier.pop{border:2px solid var(--fu-navy);position:relative}
+  .tier .price{font-family:Poppins,sans-serif;font-weight:900;font-size:1.5rem;margin:6px 0 4px}
+  .tier .price small{font-size:.8rem;font-weight:700;color:var(--fu-ink-soft)}
+  .tier p{font-size:.88rem;color:var(--fu-ink-soft)}
+
+  /* ---------- Steps ---------- */
+  .steps{counter-reset:step;list-style:none;margin-top:16px}
+  .step{
+    counter-increment:step;position:relative;padding:0 0 22px 52px;
+  }
+  .step::before{
+    content:counter(step);position:absolute;left:0;top:0;
+    font-family:Poppins,sans-serif;font-weight:900;font-size:1rem;color:var(--fu-paper);
+    background:var(--fu-navy);width:36px;height:36px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .step::after{
+    content:"";position:absolute;left:17px;top:40px;bottom:2px;width:2px;background:var(--fu-line);
+  }
+  .step:last-child::after{display:none}
+  .step b{display:block;font-family:Poppins,sans-serif;font-size:.98rem;margin-bottom:2px}
+  .step p{font-size:.92rem;color:var(--fu-ink-soft)}
+
+  /* ---------- Final band ---------- */
+  .final{background:var(--fu-navy);color:#E8ECF7;padding:64px 0}
+  .final .eyebrow{color:var(--fu-cyan)}
+  .final h2{color:#fff;font-size:clamp(1.4rem,3vw,2rem);font-weight:800;margin-bottom:18px;max-width:24ch}
+  .final p{max-width:72ch;font-size:1.03rem;color:#C9D2E8}
+
+  footer{background:var(--fu-ink);color:#9BA3AE;font-size:.82rem;padding:26px 0}
+  footer .wrap{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center}
+  footer b{color:var(--fu-cyan);font-family:Poppins,sans-serif}
+  footer span.tag{color:#E8ECF7;font-family:Poppins,sans-serif;font-weight:700}
+
+  @media (max-width:820px){
+    .grid.c3,.tiers{grid-template-columns:1fr}
+    .grid.c2{grid-template-columns:1fr}
+    .hero .wrap{grid-template-columns:1fr;gap:24px}
+    .hero img{width:110px}
+    .topbar .wrap{gap:10px}
+    .topbar nav a{font-size:.74rem;padding:5px 7px}
+  }
+  @media print{
+    .topbar{position:static}
+    body{background:#fff;font-size:11pt}
+    section{padding:22px 0}
+    .final,footer{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ TOP BAR ============ -->
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand">FIRST<span>USE</span></div>
+    <nav>
+      <a href="#summary">Summary</a>
+      <a href="#problem">Problem</a>
+      <a href="#why-now">Why Now</a>
+      <a href="#market">Market</a>
+      <a href="#evidence">Evidence</a>
+      <a href="#community">Community Value</a>
+      <a href="#economics">Economics</a>
+      <a href="#risks">Risks</a>
+      <a href="#recommendation">Recommendation</a>
+    </nav>
+  </div>
+</div>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap">
+    <img src="assets/first-use-logo.jpg" alt="First Use logo — Tapping Into Potential">
+    <div>
+      <p class="eyebrow">First Use · Business Case · 23 September 2026</p>
+      <h1>Coaching Diagram App</h1>
+      <p class="lede">The case for an AFL-native, phone-first diagram and publishing platform for community football coaches — and the value it returns to the grassroots game.</p>
+      <div class="stat-row">
+        <div class="stat-chip"><b>28,500</b><span>Registered community AFL coaches</span></div>
+        <div class="stat-chip"><b>380,000+</b><span>Local footballers</span></div>
+        <div class="stat-chip"><b>0</b><span>AFL-native diagram tools</span></div>
+        <div class="stat-chip"><b>A$39</b><span>Per-coach, per-year</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 1. EXECUTIVE SUMMARY ============ -->
+<section id="summary">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">01</span><h2>Executive Summary</h2></div>
+    <p>Australian football has <b>28,500 registered community coaches</b> and <b>380,000+ local players</b>, yet no product lets a volunteer coach draw, brand, and share an AFL game plan from their phone. The AFL-native tools do game-day logistics; the diagram tools are multi-sport, iPad-era, or poorly executed. Demand for the <i>output</i> — ball-movement diagrams, telestrated clips, club-branded graphics — is visibly proven, but today it is served by hand-drawing, blurry screenshots in group chats, or expensive outsourced services.</p>
+    <p>This product fills that gap with a phone-first, AFL-native diagram and publishing tool at community pricing <span class="chip free">Free tier</span> <span class="chip paid">~A$39/yr coach</span> <span class="chip paid">~A$149/yr club</span>. The build is low-capital (PWA), the category is validated in other codes, and the community value — better coaching communication, club visibility, support for the growing women's cohort — is direct and measurable.</p>
+    <div class="callout navy">
+      <p><b>Recommendation — proceed as a speed-led niche play.</b> Commercially it is an indie/small-team business (realistic path to A$50–200k/yr), not a venture-scale outcome unless league-level (B2B2C) distribution lands. The community return on a modest build is high — which is the core of this case.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. THE PROBLEM ============ -->
+<section id="problem">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">02</span><h2>The Problem</h2></div>
+    <p>Community AFL coaches are overwhelmingly <b>volunteers</b> coaching from their phones, and their diagram workflow is:</p>
+    <ul class="tight">
+      <li>Pen and paper, whiteboards, or clipboards at training</li>
+      <li>Screenshots annotated in a phone photo editor — or sent un-annotated</li>
+      <li>Hand-drawn diagrams for social content (The Shinboner built a following on "semi-accurate" hand-drawn ball movement)</li>
+      <li>Or outsourced telestration services (TOPPA) at professional-club prices</li>
+    </ul>
+    <p>Meanwhile the existing AFL software category serves a <i>different job</i>: rotations, interchange, stats, and game-day management (Great Coach AFL, Rookie Me Play, iSports). The communication and education job — <b>"explain the plan to players and parents"</b> — has no AFL-native tool. The result: worse-prepared players, weaker club content, and volunteer hours wasted on workarounds.</p>
+  </div>
+</section>
+
+<!-- ============ 3. WHY NOW ============ -->
+<section id="why-now">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">03</span><h2>Why Now</h2></div>
+    <div class="grid c3">
+      <div class="card"><span class="kicker">Growing base</span><h3>Free coach accreditation</h3><p>2025 accreditation is free — the AFL is actively growing the registered-coach base the product targets, yet offers education only, with <b>no tool</b>.</p></div>
+      <div class="card"><span class="kicker">Fastest-growing cohort</span><h3>Women's coaching</h3><p>+15% YoY, with an AFL target of 40% female coaches by 2030 — a cohort that skews phone-first and is underserved by iPad-centric incumbents.</p></div>
+      <div class="card"><span class="kicker">Channel shift</span><h3>Club socials are core operations</h3><p>Recruitment, sponsorship, and parent engagement all run through Instagram and group chats. Diagrams are content — and nobody formats them for that job.</p></div>
+      <div class="card"><span class="kicker">Proven playbook</span><h3>Other codes validated it</h3><p>Soccer tactic boards with 1M+ installs win on PNG-to-group-chat export, team-colour theming, and photo overlay. AFL hasn't had this treatment.</p></div>
+      <div class="card"><span class="kicker">Weak closest rival</span><h3>CourtDraw proves demand</h3><p>CourtDraw has the feature list (AFL court, photo overlay, branding, PNG export) but rates as a very poor product in first-hand evaluation. Demand proven; quality headroom open.</p></div>
+      <div class="card"><span class="kicker">Category hole</span><h3>Coach's Eye left a gap</h3><p>The 2021 shutdown of the leading community telestration tool left a hole nothing community-priced has filled since.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. MARKET OPPORTUNITY ============ -->
+<section id="market">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">04</span><h2>Market Opportunity</h2></div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Layer</th><th>Size</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><b>Beachhead — AFL community coaches</b></td><td><b>28,500 registered</b> (2025, +5% YoY)</td><td>10% adoption ≈ 2,850 users</td></tr>
+          <tr><td><b>Expansion codes</b> — netball, rugby league/union, soccer</td><td><b>100–150k+ registered coaches</b></td><td>Same engine; proven multi-code pattern</td></tr>
+          <tr><td><b>Adjacent</b></td><td>School teachers, club content managers, AFL creators</td><td>Shinboner-style creators seed awareness</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <p><b>Willingness to pay is anchored</b> — PlayBook $14.99/yr · TacticalPad $24–63/yr · Coach Tactic Board $8–23/yr · CourtDraw ~A$10/mo · iSports community $4.49/mo. The community sweet spot of <b>A$20–50/yr per coach</b> is established by five comparable products.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. EVIDENCE OF DEMAND ============ -->
+<section id="evidence">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">05</span><h2>Evidence of Demand</h2></div>
+    <p class="muted">No signal here is speculative — each is observable behaviour people already pay time or money for.</p>
+    <div class="signals">
+      <div class="signal"><p><b>The Shinboner</b> built a substantial following on hand-drawn ball-movement diagrams — the content format is <i>consumed</i>; the tooling is manual.</p></div>
+      <div class="signal"><p><b>Paid "Designing Ball Movement for AFL Coaches" workshops</b> ($59/head, 2025) sell out — coaches pay real money for this knowledge domain.</p></div>
+      <div class="signal"><p><b>TOPPA</b> employs 20–30 staff doing filming, tagging and telestration as a service — demand exists but is served manually and expensively at club level.</p></div>
+      <div class="signal"><p><b>AFL club analysts</b> list telestration as a core skill and hand-build "coach-friendly visuals" — the professional end of the same need.</p></div>
+      <div class="signal"><p><b>App Store reviews</b> of existing boards show community coaches asking for exactly this simplicity ("better than pen and paper").</p></div>
+      <div class="signal"><p><b>CourtDraw's own pitch</b> — "players squinting at blurry screenshots in the group chat" — validates the share-to-WhatsApp/Instagram loop as the core job-to-be-done.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. COMPETITIVE GAP ============ -->
+<section id="competition">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">06</span><h2>Competitive Gap &amp; Defensibility</h2></div>
+    <p>Nothing in the market combines all five of these. (Full landscape: <i>market-research.md §7</i>.)</p>
+    <div class="diff-strip">
+      <span class="diff">AFL-native depth</span>
+      <span class="diff">Phone-first cloud</span>
+      <span class="diff">Multi-screenshot tracing</span>
+      <span class="diff">Social-form-factor branded exports</span>
+      <span class="diff">Community-AFL distribution</span>
+    </div>
+    <div class="callout navy">
+      <p><b>The moat is not the canvas</b> — tactic boards are feature-commoditised. The moat is AFL community brand, default-to-beautiful output, and the trace → brand → export → share workflow.</p>
+    </div>
+    <p><b>Exposure is real:</b> CourtDraw could add AFL depth; AFL Drill Board is free, AFL-specific and community-visible; Rookie Me / iSports have distribution; the AFL itself could build or partner. <b>Speed and community trust are the counter</b> — own the wedge before a feature-list rival fixes its execution.</p>
+  </div>
+</section>
+
+<!-- ============ 7. COMMUNITY VALUE ============ -->
+<section id="community">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">07</span><h2>The Community Value Case</h2></div>
+    <p class="muted">This is where the product generates positive value disproportionate to its size.</p>
+    <div class="grid c2" style="margin-top:18px">
+      <div class="card">
+        <span class="kicker">To coaches — volunteers</span>
+        <h3>Time back to the people who give it freely</h3>
+        <p>Replaces 30–60 minutes of hand-drawing and photo-editing per plan with minutes on a phone. No design skill needed — default-branded, club-professional output from a volunteer who "can't draw an arrow."</p>
+      </div>
+      <div class="card">
+        <span class="kicker">To players — 380,000+ local footballers</span>
+        <h3>Clearer teaching, mostly for juniors</h3>
+        <p>Clearer visual explanation of structures and ball movement → faster learning and more equal experience for kids whose coaches aren't professional educators. Diagrams that actually get shared, not lost on a whiteboard.</p>
+      </div>
+      <div class="card">
+        <span class="kicker">To clubs — 600+ community clubs</span>
+        <h3>Professional content clubs can't currently afford</h3>
+        <p>Social content drives recruitment, retention and sponsor appeal. Small volunteer clubs get broadcast-quality, club-branded visuals at A$149/yr — or free — instead of professional-service prices. Every shared diagram becomes club marketing.</p>
+      </div>
+      <div class="card">
+        <span class="kicker">To the code</span>
+        <h3>Supports the AFL's own investments</h3>
+        <p>Directly complements free accreditation (growing the coach base) and the 40%-female-coaches-by-2030 target (a phone-first tool for the cohort driving growth). Keeps a community telestration capability alive after Coach's Eye's 2021 shutdown.</p>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:20px">
+      <p><b>The equity argument:</b> the users least able to pay — junior club volunteers, new female coaches, regional clubs — get a genuinely useful <span class="chip free">Free</span> tier, cross-subsidised by clubs and serious users. This is a community product with a business model, not the reverse.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. ECONOMICS ============ -->
+<section id="economics">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">08</span><h2>Business Model &amp; Honest Economics</h2></div>
+    <p><b>Model: freemium SaaS.</b></p>
+    <div class="tiers">
+      <div class="tier"><span class="chip free">Free</span><div class="price">A$0</div><p>3 saved plans, watermarked. Goodwill with volunteers; the top of the funnel.</p></div>
+      <div class="tier pop"><span class="chip paid">Coach</span><div class="price">A$39<small>/yr</small></div><p>Unlimited plans, club branding, screenshot tracing, watermark-free social exports.</p></div>
+      <div class="tier"><span class="chip paid">Club</span><div class="price">A$149<small>/yr</small></div><p>10 seats, shared library, branded exports for all staff. Plus league/association licensing (B2B2C) as the scale lever.</p></div>
+    </div>
+    <h3 class="sub">Revenue scenarios — stated assumptions, coach + club tiers</h3>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Scenario</th><th>Registered users</th><th>Paid conversion</th><th>Annual revenue</th></tr></thead>
+        <tbody>
+          <tr><td><b>Conservative</b> (Y1–2, AFL only)</td><td>3,000</td><td>~4% (120 coaches + 25 clubs)</td><td><b>~A$9k</b></td></tr>
+          <tr class="hl"><td><b>Base</b> (Y3, AFL mature)</td><td>12,000</td><td>~6% (720 coaches + 120 clubs)</td><td><b>~A$50k</b></td></tr>
+          <tr><td><b>Upside</b> (multi-code + B2B2C)</td><td>60,000 across codes</td><td>~5% + 10 league deals @ A$2.5k</td><td><b>~A$200k</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout navy">
+      <p><b>Read the table honestly.</b> The base case sustains a solo founder or micro-team; the upside requires multi-code execution and institutional deals. This is <b>not venture-scale on consumer subscriptions alone</b> — it is a durable niche business with modest build/run costs (PWA, no native apps at launch, commodity infrastructure) and break-even in the low hundreds of paying coaches.</p>
+    </div>
+    <p><b>Crucially, the value case does not depend on the upside scenario.</b> Even the conservative case delivers the community outcomes in Section 07 to thousands of coaches at negligible ongoing cost per user.</p>
+  </div>
+</section>
+
+<!-- ============ 9. RISKS ============ -->
+<section id="risks">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">09</span><h2>Key Risks &amp; Mitigations</h2></div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Risk</th><th>Severity</th><th>Mitigation</th></tr></thead>
+        <tbody>
+          <tr><td>Coaches won't pay $39/yr for polish (unproven in AFL)</td><td><span class="pill high">High</span></td><td>Validate with 10–15 community coaches pre-build; generous free tier; price sits inside the established $15–63 band</td></tr>
+          <tr><td>Trace-over-screenshot is nice-to-have, not the hook</td><td><span class="pill medium">Medium</span></td><td>Make it the demo centrepiece; test hook vs. branding in validation interviews</td></tr>
+          <tr><td>AFL Drill Board grows into the same space (free, AFL-native, BigFooty-visible)</td><td><span class="pill high">High</span></td><td>Speed; talk to its builder — partnership/absorption beats a price war with free</td></tr>
+          <tr><td>CourtDraw fixes execution and adds AFL depth</td><td><span class="pill medium">Medium</span></td><td>Its on-paper lead already exists and it's still poor — counter is polish + AFL community brand, not features</td></tr>
+          <tr><td>AFL builds or partners a rival (10% community revenue commitment)</td><td><span class="pill medium">Medium</span></td><td>Position as neutral community infrastructure; make partnership more attractive than building</td></tr>
+          <tr><td>Broadcast screenshot copyright in tracing feature</td><td><span class="pill medium">Medium</span></td><td>ToS guardrails: personal coaching use vs. published club content</td></tr>
+          <tr><td>Junior roster data privacy</td><td><span class="pill medium">Medium</span></td><td>Minimal data collection; AU data residency; engage the question early</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10. RECOMMENDATION ============ -->
+<section id="recommendation">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">10</span><h2>Recommendation &amp; Next Steps</h2></div>
+    <p><b>Proceed — as a community-first niche business with speed as the strategy</b>, consistent with the market research verdict. The commercial ceiling is real but modest; the community value per dollar of build cost is high; and the window — between "generic multi-sport court" and "owned by an AFL incumbent" — is open now.</p>
+    <ol class="steps">
+      <li class="step"><b>Validate willingness to pay and the hook</b><p>10–15 community coaches (deliberately including the women's cohort): is trace-over-screenshot the killer feature, and is $39/yr acceptable?</p></li>
+      <li class="step"><b>Watch AFL Drill Board's roadmap</b><p>Consider approaching its builder before it grows into the same space.</p></li>
+      <li class="step"><b>Build the MVP as a phone-first PWA</b><p>AFL ground, drag-drop, simple palette, social-ratio PNG export, watermark-free paid tier — at TacticalPad-level visual polish.</p></li>
+      <li class="step"><b>Time launch to pre-season (Feb)</b><p>Round 1 content is the growth loop; seed Shinboner-style creators; align with the Coach.AFL accreditation ecosystem.</p></li>
+      <li class="step"><b>Define kill criteria now</b><p>E.g. if &lt;5% of alpha coaches say "I'd use this Saturday," or zero conversion intent at $39 — stop or pivot before scaling cost.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ FINAL BAND ============ -->
+<div class="final">
+  <div class="wrap">
+    <p class="eyebrow">The Pitch</p>
+    <h2>A community product with a reason to exist.</h2>
+    <p>There are more registered community AFL coaches in Australia than members of most professional associations, and every one of them is trying to explain footy with a pen, a whiteboard, or a blurry screenshot. Every comparable code solved this years ago; footy hasn't. For the price of a modest PWA build, this product gives volunteer coaches back their evenings, gives 380,000 local players clearer teaching, gives grassroots clubs professional content they can't currently afford, and gives the AFL's own participation and women's-coaching strategies a tool they don't have. It won't be a unicorn — it will be something better suited to its owner: a durable, loved, community-positive business with a defensible niche and a genuine reason to exist.</p>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div><b>FIRST USE</b> · <span class="tag">Tapping Into Potential</span></div>
+    <div>Coaching Diagram App — Business Case · 23 Sep 2026</div>
+    <div>Sources: market-research.md · PRD-skeleton.md · firstuse.com.au brand theme</div>
+  </div>
+</footer>
+
+</body>
+</html>
